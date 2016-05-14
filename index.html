@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<meta charset="UTF-8">
+<title>File Metadata Microservice</title>
+</head>
+<body>
+<div class="container">
+<h1 class="page-header">File Metadata Microservice</h1>
+<p><a href="https://github.com/Soirana/file-sizer">Project</a>
+by Soirana</p>
+<blockquote>User stories:
+<ul>
+<li>I can submit a FormData object that includes a file upload.
+</li>
+<li>When I submit something, I will receive the file size in bytes within the JSON response.</li>
+</ul>
+</blockquote>
+	<form id="file-form" method="POST"  enctype="multipart/form-data">
+		<input type="file" id = "faker"/>
+		<input type="submit" value="Upload" />
+	</form>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+	<script type="text/javascript">
+	//I can't see point of letting the whole file to hit the server side
+	//although this way no much value of using post at all...
+	//since redirect happens in callback. At least POST is used..
+		var size = "0";
+		$('input[type=file]').on('change', function(event) {
+				size = document.getElementById("faker").files[0].size;
+				console.log(size);
+			});
+
+		$('form').on('submit', function(event) {
+			event.stopPropagation();
+			event.preventDefault();
+			
+    		$.ajax({
+        		url : "/",
+        		type: "POST",
+        		data: JSON.stringify({weight: size}),
+       			contentType: "application/json; charset=utf-8",
+        		dataType   : "json",
+        		success    : function(d){
+        						window.location = d.redirect		
+        }
+    });
+	});
+	</script>
+<h3>Example usage:</h3>
+<p> Use selfexplanatory buttons...</p>
+<h2>Example output:</h2>
+<code>{"size": "207760 bytes"}</code>
+</div>
+</body>
+</html>
